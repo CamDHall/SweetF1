@@ -1,7 +1,3 @@
-## Notes
-- IF YOU JUST NEED EXISTING DATA: unzip the relevant event and move it into the "data" directory
-
-
 ## Features
 
 - **Data collector:** A python project using FastF1 to extract telemetry data per drive, per event
@@ -23,8 +19,6 @@
 - Create a venv project
 - With the venv active, in the "python/src" directory run "pip install -r requirements"
 - In Visual studio run main.py or "python ./main.py"
-# Existing Data
-- The "events" folder has zipped files of events which have already been extracted
 ### Prerequisites
 - [Docker](https://www.docker.com/get-started/) - Docker
 - [NET](https://dotnet.microsoft.com/en-us/download) - .NET 8
