@@ -1,0 +1,24 @@
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg14
+    container_name: RacingDBContainer
+    hostname: racingdb
+    environment:
+      POSTGRES_USER: serviceUser
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: RacingDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+    restart: always
+  sweettech.sweetracing:
+    image: ${DOCKER_REGISTRY-}sweettechsweetracing
+    depends_on:
+      - timescaledb
+    build:
+      context: .
+      dockerfile: SweetTech.SweetRacing/Dockerfile
+  
+volumes:
+  timescale_data:

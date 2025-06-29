@@ -1,0 +1,6 @@
+@SweetTech.SweetRacing_HostAddress = http://localhost:5167
+
+GET {{SweetTech.SweetRacing_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

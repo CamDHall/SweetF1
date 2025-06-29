@@ -1,0 +1,43 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+.env
+# exclude everything
+data/*
+
+# exception to the rule
+!data/.gitkeep 
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+vs/
+
+# Rider
+idea/
+
+# Visual Studio Code
+vscode/
+
+# .NET Core
+project.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# NuGet Packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+# Others
+node_modules/
+typings/
