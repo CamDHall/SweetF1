@@ -41,3 +41,58 @@ artifacts/
 # Others
 node_modules/
 typings/
+
+Copy the code
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# Asset meta files
+/[Aa]ssets/**/*.meta
+
+# Auto-generated VS/VSCode project files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Unity Cache Server
+/[Cc]ache/
+
+# Unity Package Manager
+/[Pp]ackages/com.unity.package-manager*
+
+# Unity Editor settings
+/[Uu]ser[Ss]ettings/
+
+# Crash Reports
+/[Cc]rash[Rr]eports/
+
+# Packed Addressable Assets
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*
+
+# Other generated files
+*.log
+*.stacktrace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE-specific files
+.vscode/
+.idea/
+*.iml
+

@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 from fastf1.core import Telemetry
 
+from models.session_telemetry_data import SessionTelemetryData
+
 @dataclass
 class DriverRaceData:
     name: str
-    qual_session: Telemetry
-    race_session: Telemetry
-    practice_session_1: Telemetry | None = None
-    practice_session_2: Telemetry | None = None
-    practice_session_3: Telemetry | None = None
+    qual_session: SessionTelemetryData
+    race_session: SessionTelemetryData
+    practice_session_1: SessionTelemetryData | None = None
+    practice_session_2: SessionTelemetryData | None = None
+    practice_session_3: SessionTelemetryData | None = None
 
     def __init__(self, name, p1, p2, p3, q, r):
         self.name = name

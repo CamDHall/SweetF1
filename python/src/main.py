@@ -6,13 +6,20 @@ import os
 import fastf1
 
 from models.driver_race_data import DriverRaceData
+from data_tool import extract_data
 from storage_service import StorageService
 
 def main():
     # TODO: Sanitize input 
-    event = input("What event do you want to catalogue? ")
-    first_year = input("Starting year? ")
-    last_year = input("Ending year? ")
+    event = "French Grand Prix"
+    first_year = "2022"
+    last_year = "2022"
+    race_data_only = True
+    #event = input("What event do you want to catalogue? ")
+    #first_year = input("Starting year? ")
+    #last_year = input("Ending year? ")
+    #race_data_only_input = input("Only retrieve race data? (y/n) ")
+    #race_data_only = race_data_only_input.lower() == "y"
 
     event_name_no_space = event.replace(" ", "")
 
@@ -24,8 +31,6 @@ def main():
         drivers_data = get_driver_telemetry_data(event)
 
         storage_service.save_file(f"data/{event_name_no_space}", f"{event_year}.txt", drivers_data)
-
-    storage_service.zip_data_dir()
 
 def retrieve_events(name, first_year, last_year, event_name_no_space):
     events = []
@@ -97,25 +102,25 @@ def get_driver_telemetry_data(event):
             
             if practice_session_1 != None:
                 try:
-                    p1_telemetry = practice_session_1.car_data[driver_number]
+                    p1_telemetry = extract_data(practice_session_1, driver_number)
                 except:
                     p1_telemetry = None
                     print(f"No p1 telemetry data for driver: {driver_name}")
             if practice_session_2 != None:
                 try:
-                    p2_telemetry = practice_session_2.car_data[driver_number]
+                    p2_telemetry = extract_data(practice_session_2, driver_number)
                 except:
                     p2_telemetry = None
                     print(f"No p2 telemetry data for driver: {driver_name}")
             if practice_session_3 != None:
                 try:
-                    p3_telemetry = practice_session_3.car_data[driver_number]
+                    p3_telemetry = extract_data(practice_session_3, driver_number)
                 except:
                     p3_telemetry = None
                     print(f"No p3 telemetry data for driver: {driver_name}")
-    
-            q_telemetry = qual_session.car_data[driver_number]
-            r_telemetry = race_session.car_data[driver_number]
+
+            q_telemetry = extract_data(qual_session, driver_number)
+            r_telemetry = extract_data(race_session, driver_number)
 
             drivers_race_data.append(
                 DriverRaceData(driver_name, p1_telemetry, p2_telemetry, p3_telemetry, q_telemetry, r_telemetry))
