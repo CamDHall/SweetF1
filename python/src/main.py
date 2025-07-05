@@ -5,9 +5,11 @@
 import os
 import fastf1
 
-from models.driver_race_data import DriverRaceData
+from models.driver_race_data import DriverRaceData, SessionName
 from data_tool import extract_data
 from storage_service import StorageService
+
+storage_service = StorageService()
 
 def main():
     # TODO: Sanitize input 
@@ -25,12 +27,8 @@ def main():
 
     print(f"Retrieving events for: {event} from {first_year} to {last_year}")
     events = retrieve_events(event, int(first_year), int(last_year), event_name_no_space)
-    storage_service = StorageService()
     for event in events:
-        event_year = event.year
-        drivers_data = get_driver_telemetry_data(event)
-
-        storage_service.save_file(f"data/{event_name_no_space}", f"{event_year}.txt", drivers_data)
+        get_driver_telemetry_data(event)
 
 def retrieve_events(name, first_year, last_year, event_name_no_space):
     events = []
@@ -46,6 +44,9 @@ def retrieve_events(name, first_year, last_year, event_name_no_space):
     
     return events
 
+def save_session_data(event_name, event_year, driver_name, session_name, telemetry_data):
+    data = DriverRaceData(driver_name, session_name, telemetry_data)
+    storage_service.save_file(f"data/{event_year}/{driver_name}", f"{session_name.name}.txt", data)
 
 def get_driver_telemetry_data(event):
     event_year = event.year
@@ -89,12 +90,6 @@ def get_driver_telemetry_data(event):
     driver_names = race_session.results["FullName"].values
     driver_numbers = race_session.results["DriverNumber"].values
 
-
-    drivers_race_data = []
-    p1_telemetry = None
-    p2_telemetry = None
-    p3_telemetry = None
-
     for i in range(0, len(driver_names)):
         try:
             driver_number = driver_numbers[i]
@@ -102,30 +97,27 @@ def get_driver_telemetry_data(event):
             
             if practice_session_1 != None:
                 try:
-                    p1_telemetry = extract_data(practice_session_1, driver_number)
+                    save_session_data(event_name, event_year, driver_name, SessionName.P_1, 
+                                      extract_data(practice_session_1, driver_number))
                 except:
-                    p1_telemetry = None
                     print(f"No p1 telemetry data for driver: {driver_name}")
             if practice_session_2 != None:
                 try:
-                    p2_telemetry = extract_data(practice_session_2, driver_number)
+                    save_session_data(event_name, event_year, driver_name, SessionName.P_2, 
+                                      extract_data(practice_session_2, driver_number))
                 except:
-                    p2_telemetry = None
                     print(f"No p2 telemetry data for driver: {driver_name}")
             if practice_session_3 != None:
                 try:
-                    p3_telemetry = extract_data(practice_session_3, driver_number)
+                    save_session_data(event_name, event_year, driver_name, SessionName.P_3, 
+                                      extract_data(practice_session_3, driver_number))
                 except:
-                    p3_telemetry = None
                     print(f"No p3 telemetry data for driver: {driver_name}")
 
-            q_telemetry = extract_data(qual_session, driver_number)
-            r_telemetry = extract_data(race_session, driver_number)
+            save_session_data(event_name, event_year, driver_name, SessionName.Q, extract_data(qual_session, driver_number))
+            save_session_data(event_name, event_year, driver_name, SessionName.R, extract_data(race_session, driver_number))
 
-            drivers_race_data.append(
-                DriverRaceData(driver_name, p1_telemetry, p2_telemetry, p3_telemetry, q_telemetry, r_telemetry))
         except Exception as e:
             print(f"ERROR, could not retrieve all tele data for event: {event_name}")
 
-    return drivers_race_data
 main()

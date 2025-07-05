@@ -1,21 +1,22 @@
 from dataclasses import dataclass
-from fastf1.core import Telemetry
+from enum import Enum
 
 from models.session_telemetry_data import SessionTelemetryData
+
+class SessionName(Enum):
+    P_1 = "practice_1"
+    P_2 = "practice_2"
+    P_3 = "practice_3"
+    Q = "qualifying"
+    R = "race"
 
 @dataclass
 class DriverRaceData:
     name: str
-    qual_session: SessionTelemetryData
-    race_session: SessionTelemetryData
-    practice_session_1: SessionTelemetryData | None = None
-    practice_session_2: SessionTelemetryData | None = None
-    practice_session_3: SessionTelemetryData | None = None
+    session_name: SessionName
+    session: SessionTelemetryData
 
-    def __init__(self, name, p1, p2, p3, q, r):
+    def __init__(self, name, session_name, session):
         self.name = name
-        self.practice_session_1 = p1
-        self.practice_session_2 = p2
-        self.practice_session_3 = p3
-        self.qual_session = q
-        self.race_session = r
+        self.session_name = session_name
+        self.session = session
