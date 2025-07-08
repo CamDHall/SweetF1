@@ -2,6 +2,7 @@
 # Then get sessions
 # then get telemetry data per drive
 # then write t0 file
+from dataclasses import asdict
 import os
 import fastf1
 
@@ -33,7 +34,7 @@ def main():
 def retrieve_events(name, first_year, last_year, event_name_no_space):
     events = []
     for i in range(first_year, last_year + 1):
-        file_name = f"data/{event_name_no_space}/{i}.txt"
+        file_name = f"data/{event_name_no_space}/{i}.json"
         if os.path.exists(file_name):
             print(f"File {file_name} already exists, skipping...")
             continue
@@ -46,7 +47,7 @@ def retrieve_events(name, first_year, last_year, event_name_no_space):
 
 def save_session_data(event_name, event_year, driver_name, session_name, telemetry_data):
     data = DriverRaceData(driver_name, session_name, telemetry_data)
-    storage_service.save_file(f"data/{event_year}/{driver_name}", f"{session_name.name}.txt", data)
+    storage_service.save_file(f"data/{event_name}/{event_year}/{driver_name}", f"{session_name.name}.json", asdict(data))
 
 def get_driver_telemetry_data(event):
     event_year = event.year

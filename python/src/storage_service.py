@@ -11,7 +11,7 @@ class StorageService:
 
         # Define the full path to the file
         file_path = os.path.join(subdirectory, file_name)
-        with open(file_path, "wb") as text_file:
-            pickle.dump(content, text_file)
+        with open(file_path, "w") as json_file:
+            json.dump(content, json_file)
 
-        print("Serialized data written to text file successfully!")
+        print("Serialized data written to JSON file successfully!")

@@ -2,27 +2,30 @@ from models.session_telemetry_data import RacePositionData, SessionTelemetryData
 
 
 def extract_data(session_data, driver_number):
-    p1_telemetry = session_data.car_data[driver_number]
+    telemetry = session_data.car_data[driver_number]
     try:
-        p1_telemetry = p1_telemetry.interpolate()
-        position = session_data.pos_data[driver_number]
+        telemetry = telemetry.interpolate()
+        positions_raw = session_data.pos_data[driver_number]
 
-        position_obj = RacePositionData(
-            date=position['Date'].values.tolist(),
-            time=position['Time'].values.tolist(),
-            x=position['X'].values.tolist(),
-            y=position['Y'].values.tolist(),
-            z=position['Z'].values.tolist()
-        )
+        positions = []
+
+        for i in range(len(positions_raw) - 1):
+            position = RacePositionData(
+                x=positions_raw['X'].values[i],
+                y=positions_raw['Y'].values[i],
+                z=positions_raw['Z'].values[i]
+            )
+
+            positions.append(position)
 
         telemetry_obj = SessionTelemetryData(
-            position=position_obj,
-            speed=p1_telemetry['Speed'].values.tolist(),
-            rpm=p1_telemetry['RPM'].values.tolist(),
-            gear=p1_telemetry['nGear'].values.tolist(),
-            brake=p1_telemetry['Brake'].values.tolist(),
-            throttle=p1_telemetry['Throttle'].values.tolist(),
-            drs=p1_telemetry['DRS'].values.tolist()
+            positions=positions,
+            speeds=telemetry['Speed'].values.tolist(),
+            rpms=telemetry['RPM'].values.tolist(),
+            gears=telemetry['nGear'].values.tolist(),
+            brakes=telemetry['Brake'].values.tolist(),
+            throttles=telemetry['Throttle'].values.tolist(),
+            drs=telemetry['DRS'].values.tolist()
         )
 
         return telemetry_obj
